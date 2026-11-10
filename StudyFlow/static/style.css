@@ -1,0 +1,183 @@
+/* --- Base Variables & Default Theme (Cozy) --- */
+:root {
+    --bg-color: #f9f5f0;
+    --text-color: #3e3a39;
+    --primary: #d4a373;
+    --secondary: #faedcd;
+    --card-bg: #ffffff;
+    --border-radius: 12px;
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- Theme 2: Minimal --- */
+body.theme-minimal {
+    --bg-color: #f4f4f9;
+    --text-color: #1a1a1a;
+    --primary: #4a90e2;
+    --secondary: #e1e8ed;
+    --card-bg: #ffffff;
+    --border-radius: 4px;
+}
+
+/* --- Global Styles --- */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-family);
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: var(--primary);
+    color: white;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+    font-weight: bold;
+    opacity: 0.7;
+}
+
+nav a.active, nav a:hover {
+    opacity: 1;
+    border-bottom: 2px solid white;
+}
+
+button {
+    cursor: pointer;
+    background: white;
+    color: var(--primary);
+    border: none;
+    padding: 5px 10px;
+    border-radius: var(--border-radius);
+    font-weight: bold;
+}
+
+/* --- Dashboard Layout --- */
+.dashboard {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.quick-add-panel {
+    flex: 1;
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.timetable-section {
+    flex: 2;
+}
+
+.quick-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 2rem;
+}
+
+.quick-form input, .quick-form select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: var(--border-radius);
+}
+
+.quick-form button {
+    background: var(--primary);
+    color: white;
+    padding: 10px;
+}
+
+/* --- Timetable Grid --- */
+.timetable-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.time-block {
+    background: var(--secondary);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    display: flex;
+    flex-direction: column;
+    border-left: 4px solid var(--primary);
+}
+
+.block-day {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: var(--primary);
+}
+
+/* --- Today View Styles --- */
+.today-dashboard {
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.progress-container {
+    background: #e0e0e0;
+    border-radius: 10px;
+    height: 20px;
+    margin: 10px 0;
+    overflow: hidden;
+}
+
+.progress-bar {
+    background: var(--primary);
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.task-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.task-list li {
+    background: var(--card-bg);
+    margin-bottom: 10px;
+    padding: 15px;
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.task-list li.completed .task-title {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+
+.checkbox {
+    font-size: 1.5rem;
+    text-decoration: none;
+    color: var(--primary);
+}
+
+.task-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.task-meta {
+    font-size: 0.8rem;
+    opacity: 0.6;
+}

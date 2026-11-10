@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyFlow | Today</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="theme-cozy">
+    <nav>
+        <h1>StudyFlow</h1>
+        <div>
+            <a href="/">Week View</a>
+            <a href="/today" class="active">Today View</a>
+            <button id="theme-toggle">Switch Theme</button>
+        </div>
+    </nav>
+
+    <main class="today-dashboard">
+        <header class="today-header">
+            <h2>Happy {{ today_name }}!</h2>
+            
+            <!-- Progress Tracker -->
+            <div class="progress-container">
+                <div class="progress-bar" style="width: {{ progress }}%;"></div>
+            </div>
+            <p>{{ progress }}% of tasks completed</p>
+        </header>
+
+        <div class="today-columns">
+            <!-- Today's Schedule -->
+            <section class="today-schedule">
+                <h3>Today's Schedule</h3>
+                {% for block in blocks %}
+                <div class="time-block">
+                    <strong>{{ block['title'] }}</strong>
+                    <span>{{ block['start_time'] }} - {{ block['end_time'] }}</span>
+                </div>
+                {% else %}
+                <p>No classes or study blocks today. Enjoy your free time!</p>
+                {% endfor %}
+            </section>
+
+            <!-- Task Checklist -->
+            <section class="task-list">
+                <h3>Task Manager</h3>
+                <ul>
+                    {% for task in tasks %}
+                    <li class="{% if task['completed'] %}completed{% endif %}">
+                        <a href="/toggle_task/{{ task['id'] }}" class="checkbox">
+                            {% if task['completed'] %}☑{% else %}☐{% endif %}
+                        </a>
+                        <div class="task-info">
+                            <span class="task-title">{{ task['title'] }}</span>
+                            <span class="task-meta">
+                                Priority: {{ task['priority'] }} | Est: {{ task['duration'] }}m
+                            </span>
+                        </div>
+                    </li>
+                    {% else %}
+                    <li>No tasks for today. Add some in the Week View!</li>
+                    {% endfor %}
+                </ul>
+            </section>
+        </div>
+    </main>
+    
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
