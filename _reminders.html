@@ -1,0 +1,10 @@
+<!-- Floating reminder box (bottom-right corner). Included on every page. -->
+<aside id="reminder-box" class="reminder-box">
+    <div class="reminder-panel" id="reminder-panel">
+        <h3>Coming up</h3>
+        <div id="reminder-items">{% include '_reminder_items.html' %}</div>
+    </div>
+    <button id="reminder-toggle" class="reminder-fab" type="button" title="Upcoming deadlines" aria-label="Toggle reminders">
+        🔔 <span id="reminder-badge" class="reminder-badge" {% if not reminders %}hidden{% endif %}>{{ reminders|length }}</span>
+    </button>
+</aside>

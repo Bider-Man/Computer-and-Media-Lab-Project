@@ -1,0 +1,52 @@
+{# Reusable timetable grid. Needs: days, day_dates, today_date, timetable, allday, allday_any, hours, hour_px, grid_height, start_hour, end_hour #}
+<div class="tt-wrap">
+  <div class="tt" style="--cols: {{ days|length }}; --hour-px: {{ hour_px }}px;" data-start-hour="{{ start_hour }}" data-end-hour="{{ end_hour }}">
+    <div class="tt-head">
+      <div></div>
+      {% for d in days %}
+        <div class="tt-dayhead {{ 'is-today' if day_dates[d] == today_date }}">
+          {% if days|length == 1 %}{{ d }}{% else %}{{ d[:3] }} <span class="tt-daynum">{{ day_dates[d].day }}</span>{% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+    {% if allday_any %}
+    <div class="tt-allday">
+      <div class="tt-allday-label">all-day</div>
+      {% for d in days %}
+        <div class="tt-allday-cell">
+          {% for a in allday[d] %}
+            <span class="tt-chip" style="--h: {{ a.hue }};" title="{{ a.title }} · {{ a.cal }}">{{ a.title }}</span>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="tt-body" style="height: {{ grid_height }}px;">
+      <div class="tt-hours">
+        {% for h in hours %}
+          <div class="tt-hour" style="top: {{ (h - start_hour) * hour_px }}px;">{{ '%02d:00' % h }}</div>
+        {% endfor %}
+      </div>
+
+      {% for d in days %}
+        <div class="tt-col {{ 'is-today' if day_dates[d] == today_date }}" data-day="{{ d }}">
+          {% for b in timetable[d] %}
+            <div class="tt-block {{ b.kind }}"
+                 style="top: {{ b.top }}px; height: {{ b.height }}px; left: calc({{ b.left }}% + 2px); width: calc({{ b.width }}% - 4px); --h: {{ b.hue }};"
+                 title="{{ b.title }} ({{ b.start }}–{{ b.end }}){% if b.cal %} · {{ b.cal }}{% endif %}">
+              <div class="tt-block-title">{% if b.kind == 'event' %}📅 {% endif %}{{ b.title }}</div>
+              <div class="tt-block-time">{{ b.start }}–{{ b.end }}</div>
+              {% if b.kind == 'block' %}
+              <form method="post" action="{{ url_for('delete_block', block_id=b.id) }}" class="tt-del">
+                <button type="submit" aria-label="Delete block" title="Delete">×</button>
+              </form>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>

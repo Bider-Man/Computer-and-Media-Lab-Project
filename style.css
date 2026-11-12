@@ -1,0 +1,446 @@
+/* --- Base Variables & Default Theme (Cozy) --- */
+:root {
+    --bg-color: #f9f5f0;
+    --text-color: #3e3a39;
+    --primary: #d4a373;
+    --secondary: #faedcd;
+    --card-bg: #ffffff;
+    --border-radius: 12px;
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+    /* new: values that used to be hard-coded, so dark mode can change them */
+    --nav-bg: var(--primary);
+    --nav-text: #ffffff;
+    --input-border: #cccccc;
+    --track-bg: #e0e0e0;
+    --line-color: rgba(0, 0, 0, 0.09);
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    --block-l: 88%;          /* lightness of timetable blocks */
+    --block-text-l: 22%;
+    --now-color: #e5484d;
+    --hour-px: 56px;         /* keep in sync with HOUR_PX in app.py */
+}
+
+/* --- Theme 2: Minimal --- */
+:root.theme-minimal {
+    --bg-color: #f4f4f9;
+    --text-color: #1a1a1a;
+    --primary: #4a90e2;
+    --secondary: #e1e8ed;
+    --card-bg: #ffffff;
+    --border-radius: 4px;
+}
+
+/* --- Dark mode (works on top of either theme) --- */
+:root.dark {
+    --nav-bg: var(--card-bg);
+    --nav-text: var(--text-color);
+    --input-border: #4a4a52;
+    --track-bg: rgba(255, 255, 255, 0.12);
+    --line-color: rgba(255, 255, 255, 0.09);
+    --shadow: 0 4px 8px rgba(0, 0, 0, 0.45);
+    --block-l: 26%;
+    --block-text-l: 90%;
+    --now-color: #ff6369;
+    color-scheme: dark;
+}
+
+/* Cozy + dark: warm, low-contrast browns */
+:root.dark:not(.theme-minimal) {
+    --bg-color: #1f1a17;
+    --text-color: #efe6dd;
+    --primary: #d4a373;
+    --secondary: #3a2f27;
+    --card-bg: #2a2420;
+}
+
+/* Minimal + dark: cool, near-black blues */
+:root.dark.theme-minimal {
+    --bg-color: #12141a;
+    --text-color: #e8eaf0;
+    --primary: #5aa0f0;
+    --secondary: #232836;
+    --card-bg: #1b1f29;
+}
+
+/* --- Global Styles --- */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-family);
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: var(--nav-bg);
+    color: var(--nav-text);
+    transition: background-color 0.3s;
+}
+
+nav a {
+    color: var(--nav-text);
+    text-decoration: none;
+    margin: 0 10px;
+    font-weight: bold;
+    opacity: 0.7;
+}
+
+nav a.active, nav a:hover {
+    opacity: 1;
+    border-bottom: 2px solid var(--nav-text);
+}
+
+button {
+    cursor: pointer;
+    background: var(--card-bg);
+    color: var(--primary);
+    border: none;
+    padding: 5px 10px;
+    border-radius: var(--border-radius);
+    font-weight: bold;
+}
+
+nav button { margin-left: 6px; }
+:root.dark nav button { background: var(--secondary); }
+
+/* --- Dashboard Layout --- */
+.dashboard {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    align-items: flex-start;
+}
+
+.quick-add-panel {
+    flex: 0 0 280px;
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.timetable-section {
+    flex: 1;
+    min-width: 0;   /* lets the timetable scroll sideways instead of overflowing */
+}
+
+.quick-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 2rem;
+}
+
+.quick-form input, .quick-form select {
+    padding: 8px;
+    border: 1px solid var(--input-border);
+    border-radius: var(--border-radius);
+    background: var(--bg-color);
+    color: var(--text-color);
+    font: inherit;
+}
+
+.quick-form button {
+    background: var(--primary);
+    color: white;
+    padding: 10px;
+}
+:root.dark .quick-form button { color: var(--bg-color); }
+
+@media (max-width: 900px) {
+    .dashboard { flex-direction: column; }
+    .quick-add-panel { flex: none; width: 100%; box-sizing: border-box; }
+    .timetable-section { width: 100%; }
+}
+
+/* --- Weekly Timetable (real grid) --- */
+.tt-wrap {
+    overflow-x: auto;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.tt { min-width: 640px; --time-col: 54px; }
+
+.tt-head, .tt-body {
+    display: grid;
+    grid-template-columns: var(--time-col) repeat(var(--cols), minmax(0, 1fr));
+}
+
+.tt-head {
+    background: var(--secondary);
+    border-bottom: 1px solid var(--line-color);
+}
+
+.tt-dayhead {
+    text-align: center;
+    padding: 0.6rem 0;
+    font-weight: bold;
+    font-size: 0.9rem;
+    border-left: 1px solid var(--line-color);
+}
+.tt-dayhead.is-today { color: var(--primary); }
+
+.tt-body { position: relative; }
+.tt-hours { position: relative; }
+
+.tt-hour {
+    position: absolute;
+    right: 8px;
+    transform: translateY(-50%);
+    font-size: 0.7rem;
+    opacity: 0.6;
+    background: var(--card-bg);
+    padding: 0 2px;
+}
+.tt-hour:first-child { transform: none; }
+
+.tt-col {
+    position: relative;
+    border-left: 1px solid var(--line-color);
+    background-image: linear-gradient(to bottom, var(--line-color) 1px, transparent 1px);
+    background-size: 100% var(--hour-px);
+}
+.tt-col.is-today { background-color: color-mix(in srgb, var(--primary) 7%, transparent); }
+
+.tt-block {
+    position: absolute;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: 4px 6px;
+    border-radius: calc(var(--border-radius) - 4px);
+    background: hsl(var(--h) 65% var(--block-l));
+    color: hsl(var(--h) 60% var(--block-text-l));
+    border-left: 4px solid hsl(var(--h) 65% 50%);
+    font-size: 0.78rem;
+    line-height: 1.25;
+    box-shadow: var(--shadow);
+}
+.tt-block-title { font-weight: bold; padding-right: 14px; }
+.tt-block-time { opacity: 0.8; font-size: 0.7rem; }
+
+.tt-del { position: absolute; top: 1px; right: 2px; margin: 0; }
+.tt-del button {
+    background: none;
+    color: inherit;
+    padding: 0 3px;
+    font-size: 1rem;
+    line-height: 1;
+    opacity: 0;
+}
+.tt-block:hover .tt-del button, .tt-del button:focus { opacity: 0.8; }
+@media (hover: none) { .tt-del button { opacity: 0.6; } }
+
+/* "now" line (drawn by script.js on today's column) */
+.now-line {
+    position: absolute;
+    left: 0; right: 0;
+    height: 2px;
+    background: var(--now-color);
+    z-index: 5;
+    pointer-events: none;
+}
+.now-line::before {
+    content: "";
+    position: absolute;
+    left: -4px; top: -3px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--now-color);
+}
+
+/* --- Today View Styles --- */
+.today-dashboard {
+    padding: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.today-columns {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 2rem;
+    align-items: start;
+}
+@media (max-width: 800px) { .today-columns { grid-template-columns: 1fr; } }
+
+.progress-container {
+    background: var(--track-bg);
+    border-radius: 10px;
+    height: 20px;
+    margin: 10px 0;
+    overflow: hidden;
+}
+
+.progress-bar {
+    background: var(--primary);
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.task-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.task-list li {
+    background: var(--card-bg);
+    margin-bottom: 10px;
+    padding: 15px;
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: var(--shadow);
+}
+
+.task-list li.completed .task-title {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+
+.checkbox {
+    font-size: 1.5rem;
+    text-decoration: none;
+    color: var(--primary);
+}
+
+.task-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.task-meta {
+    font-size: 0.8rem;
+    opacity: 0.6;
+}
+
+/* =====================================================================
+   Calendar import, week navigation, all-day row, imported events
+   ===================================================================== */
+.hint { opacity: 0.65; font-size: 0.75rem; line-height: 1.35; }
+
+.flashes { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1rem; }
+.flash { padding: 8px 10px; border-radius: var(--border-radius); font-size: 0.85rem; }
+.flash.success { background: rgba(48, 164, 108, 0.18); color: #30a46c; }
+.flash.error   { background: rgba(229, 72, 77, 0.16); color: var(--now-color); }
+
+.cal-list h3 { margin-bottom: 0.5rem; }
+.cal-item { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+.cal-info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.cal-info strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cal-info small { opacity: 0.6; font-size: 0.72rem; }
+.cal-item form { margin: 0; }
+.cal-item button { background: var(--secondary); padding: 4px 9px; }
+
+.week-nav { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+.week-nav h2 { margin: 0.8rem 0; }
+.week-controls { display: flex; align-items: center; gap: 0.6rem; font-weight: bold; font-size: 0.9rem; }
+.week-controls a {
+    text-decoration: none; color: var(--primary); background: var(--card-bg);
+    padding: 2px 10px; border-radius: var(--border-radius); box-shadow: var(--shadow);
+}
+.week-controls .week-today { font-size: 0.8rem; }
+
+.tt-daynum { opacity: 0.6; font-weight: normal; }
+
+.tt-allday {
+    display: grid;
+    grid-template-columns: var(--time-col) repeat(var(--cols), minmax(0, 1fr));
+    border-bottom: 1px solid var(--line-color);
+    background: var(--secondary);
+}
+.tt-allday-label { font-size: 0.65rem; opacity: 0.6; padding: 6px 6px 0 0; text-align: right; }
+.tt-allday-cell {
+    border-left: 1px solid var(--line-color);
+    padding: 3px; display: flex; flex-direction: column; gap: 2px; min-width: 0;
+}
+.tt-chip {
+    font-size: 0.7rem; padding: 1px 6px; border-radius: 6px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    background: hsl(var(--h) 65% var(--block-l));
+    color: hsl(var(--h) 60% var(--block-text-l));
+}
+
+/* imported events look slightly different from your own blocks: outlined, no delete button */
+.tt-block.event {
+    border: 1px solid hsl(var(--h) 55% 50%);
+    border-left-width: 4px;
+}
+
+/* =====================================================================
+   Floating reminder box
+   ===================================================================== */
+.reminder-box {
+    position: fixed; right: 1rem; bottom: 1rem; z-index: 100;
+    display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem;
+    max-width: calc(100vw - 2rem);
+}
+.reminder-panel {
+    width: 310px; max-width: 100%; max-height: 60vh; overflow-y: auto;
+    background: var(--card-bg); color: var(--text-color);
+    border-radius: var(--border-radius); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+    border: 1px solid var(--line-color); padding: 0.9rem 1rem;
+}
+.reminder-panel h3 { margin: 0 0 0.6rem; font-size: 1rem; }
+.reminder-box.collapsed .reminder-panel { display: none; }
+
+.reminder-fab {
+    position: relative; width: 52px; height: 52px; border-radius: 50%;
+    background: var(--primary); color: white; font-size: 1.4rem; padding: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+:root.dark .reminder-fab { color: var(--bg-color); }
+.reminder-badge {
+    position: absolute; top: -4px; right: -4px; min-width: 20px; height: 20px; padding: 0 5px;
+    border-radius: 10px; background: var(--now-color); color: white;
+    font-size: 0.72rem; line-height: 20px; text-align: center; box-sizing: border-box;
+}
+
+.reminder-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.reminder {
+    display: flex; align-items: center; gap: 8px; padding: 7px 8px;
+    background: var(--secondary); border-radius: calc(var(--border-radius) - 4px);
+    border-left: 4px solid var(--primary);
+}
+.reminder.urgent { border-left-color: var(--now-color); }
+.reminder.soon   { border-left-color: #f5a623; }
+.reminder .r-body { flex: 1; min-width: 0; }
+.reminder .r-title { font-weight: bold; font-size: 0.86rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.reminder .r-when { font-size: 0.75rem; opacity: 0.7; }
+.reminder.urgent .r-when { color: var(--now-color); opacity: 1; }
+.r-done {
+    text-decoration: none; color: var(--primary); font-weight: bold;
+    border: 1px solid var(--primary); border-radius: 50%; width: 22px; height: 22px; line-height: 20px; text-align: center; flex: none;
+}
+.r-done:hover { background: var(--primary); color: var(--card-bg); }
+.reminder-empty { font-size: 0.85rem; opacity: 0.7; padding: 4px 0; }
+
+
+.corner-links {
+    position: fixed;
+    left: 1rem;
+    bottom: 1rem;
+    display: flex;
+    gap: 1rem;
+    font-size: 0.8rem;
+    z-index: 90;
+}
+.corner-links a {
+    color: var(--primary);
+    text-decoration: none;
+    opacity: 0.8;
+}
+.corner-links a:hover {
+    opacity: 1;
+    text-decoration: underline;
+}

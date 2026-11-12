@@ -1,0 +1,16 @@
+<ul class="reminder-list" data-count="{{ reminders|length }}">
+  {% for r in reminders %}
+  <li class="reminder {{ r.level }}">
+    <span class="r-icon">{{ r.icon }}</span>
+    <div class="r-body">
+      <div class="r-title">{{ r.title }}</div>
+      <div class="r-when">{{ r.when }}{% if r.sub %} · {{ r.sub }}{% endif %}</div>
+    </div>
+    {% if r.kind == 'task' %}
+    <a class="r-done" href="{{ url_for('toggle_task', task_id=r.task_id) }}" title="Mark done">✓</a>
+    {% endif %}
+  </li>
+  {% else %}
+  <li class="reminder-empty">Nothing coming up in the next 7 days 🎉</li>
+  {% endfor %}
+</ul>
