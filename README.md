@@ -42,6 +42,7 @@ python app.py
 5. Open your browser (or click the link within your terminal) to open the web page for the schedule.
 
 ## Project Structure
+```
 Computer-and-Media-Lab-Project/
 ├── app.py               # Main Flask application and database logic
 ├── requirements.txt     # Python dependencies
@@ -52,6 +53,7 @@ Computer-and-Media-Lab-Project/
 └── templates/           # HTML files
     ├── index.html       # Weekly planner view
     └── today.html       # Daily task view
+```
 
 ## Team
 Karthik Polpakkara Mana (Project Manager/Backend)
