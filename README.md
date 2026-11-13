@@ -57,5 +57,7 @@ Computer-and-Media-Lab-Project/
 
 ## Team
 Karthik Polpakkara Mana (Project Manager/Backend)
+
 Chirag Nagesh (Frontend)
+
 Anish Sharma (Quality Control/Presentation)
