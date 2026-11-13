@@ -21,7 +21,7 @@ If you are running this project for the first time, follow these steps to set up
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/your-username/Computer-and-Media-Lab-Project.git
+git clone https://github.com/Bider-Man/Computer-and-Media-Lab-Project.git
 cd Computer-and-Media-Lab-Project
 ```
 
