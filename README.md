@@ -25,7 +25,7 @@ git clone https://github.com/your-username/Computer-and-Media-Lab-Project.git
 cd Computer-and-Media-Lab-Project
 ```
 
-2. Create a virtual environment (if you are on Linux):
+2. Create a virtual environment:
 ```bash
 python -m venv venv
 source venn/bin/activate
